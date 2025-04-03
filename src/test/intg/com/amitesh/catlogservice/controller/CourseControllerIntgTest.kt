@@ -73,4 +73,22 @@ CourseControllerIntgTest {
 
         assertEquals(coursesList.size,courseDTOList?.size)
     }
+
+    @Test
+    fun updateCourse(){
+        val course = Course(id= null, name = "Amitesh", category = "Android Development")
+        courseRepository.save(course)
+        val courseDTO = CourseDTO(id= null, name = "Amitesh Singh", category = "Android Development")
+        val updatedCourse = webTestClient
+            .put()
+            .uri("/v1/courses/{courseId}", course.id)
+            .bodyValue(courseDTO)
+            .exchange()
+            .expectStatus()
+            .isOk
+            .expectBody(CourseDTO::class.java)
+            .returnResult()
+            .responseBody
+        assertEquals("Amitesh Singh",updatedCourse?.name)
+    }
 }
