@@ -1,6 +1,6 @@
 package com.amitesh.catlogservice.controller
 
-import com.amitesh.catlogservice.controller.util.getDemoCourseList
+import com.amitesh.catlogservice.util.getDemoCourseList
 import com.amitesh.catlogservice.dto.CourseDTO
 import com.amitesh.catlogservice.entity.Course
 import com.amitesh.catlogservice.repository.CourseRepository
@@ -28,8 +28,9 @@ CourseControllerIntgTest {
     lateinit var courseRepository: CourseRepository
 
     lateinit var coursesList: List<Course>
+
     @BeforeEach
-    fun setup(){
+    fun setup() {
         courseRepository.deleteAll()
         coursesList = getDemoCourseList()
         courseRepository.saveAll(coursesList)
@@ -60,7 +61,7 @@ CourseControllerIntgTest {
     }
 
     @Test
-    fun retrieveAllCourses(){
+    fun retrieveAllCourses() {
         val courseDTOList = webTestClient
             .get()
             .uri("/v1/courses")
@@ -71,14 +72,14 @@ CourseControllerIntgTest {
             .returnResult()
             .responseBody
 
-        assertEquals(coursesList.size,courseDTOList?.size)
+        assertEquals(coursesList.size, courseDTOList?.size)
     }
 
     @Test
-    fun updateCourse(){
-        val course = Course(id= null, name = "Amitesh", category = "Android Development")
+    fun updateCourse() {
+        val course = Course(id = null, name = "Amitesh", category = "Android Development")
         courseRepository.save(course)
-        val courseDTO = CourseDTO(id= null, name = "Amitesh Singh", category = "Android Development")
+        val courseDTO = CourseDTO(id = null, name = "Amitesh Singh", category = "Android Development")
         val updatedCourse = webTestClient
             .put()
             .uri("/v1/courses/{courseId}", course.id)
@@ -89,11 +90,11 @@ CourseControllerIntgTest {
             .expectBody(CourseDTO::class.java)
             .returnResult()
             .responseBody
-        assertEquals("Amitesh Singh",updatedCourse?.name)
+        assertEquals("Amitesh Singh", updatedCourse?.name)
     }
 
     @Test
-    fun deleteCourse(){
+    fun deleteCourse() {
         val course = Course(
             id = null,
             name = "Amitesh",

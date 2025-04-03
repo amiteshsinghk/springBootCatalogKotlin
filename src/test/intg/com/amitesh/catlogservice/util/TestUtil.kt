@@ -1,4 +1,4 @@
-package com.amitesh.catlogservice.controller.util
+package com.amitesh.catlogservice.util
 
 import com.amitesh.catlogservice.dto.CourseDTO
 import com.amitesh.catlogservice.entity.Course
@@ -6,7 +6,7 @@ import com.amitesh.catlogservice.entity.Course
 fun getDemoCourseList(): List<Course> = (1..100).map { index->
     Course(
         id = null,
-        name = "Course $index",
+        name = if (index == 2) "Course2222 $index" else "Course $index",
         category = "Category $index"
     )
 }

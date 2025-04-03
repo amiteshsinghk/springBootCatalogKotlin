@@ -1,7 +1,7 @@
 package com.amitesh.catlogservice
 
 import com.amitesh.catlogservice.controller.CourseController
-import com.amitesh.catlogservice.controller.util.courseDTO
+import com.amitesh.catlogservice.util.courseDTO
 import com.amitesh.catlogservice.dto.CourseDTO
 import com.amitesh.catlogservice.service.CourseService
 import com.ninjasquad.springmockk.MockkBean
