@@ -2,8 +2,10 @@ package com.amitesh.catlogservice.controller
 
 import com.amitesh.catlogservice.dto.CourseDTO
 import com.amitesh.catlogservice.service.CourseService
+import jakarta.validation.Valid
 import mu.KLogging
 import org.springframework.http.HttpStatus
+import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/v1/courses")
+@Validated
 class CourseController(val courseService: CourseService) {
     companion object {
         val logger = KLogging().logger
@@ -24,7 +27,7 @@ class CourseController(val courseService: CourseService) {
     //Add a course
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    fun addCourse(@RequestBody courseDTO: CourseDTO): CourseDTO {
+    fun addCourse(@RequestBody @Valid courseDTO: CourseDTO): CourseDTO {
         return courseService.addCourse(courseDTO)
     }
 
