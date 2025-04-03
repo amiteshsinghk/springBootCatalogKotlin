@@ -3,6 +3,7 @@ package com.amitesh.catlogservice
 import com.amitesh.catlogservice.controller.CourseController
 import com.amitesh.catlogservice.controller.util.courseDTO
 import com.amitesh.catlogservice.dto.CourseDTO
+import com.amitesh.catlogservice.entity.Course
 import com.amitesh.catlogservice.service.CourseService
 import com.ninjasquad.springmockk.MockkBean
 import io.mockk.every
@@ -70,6 +71,26 @@ class CourseControllerUnitTest {
             .responseBody
 
         assertEquals(2,courseDTOList?.size)
+    }
+
+    @Test
+    fun updateCourse(){
+        val course = Course(id= null, name = "Amitesh", category = "Android Development")
+        every { courseServiceMockk.updateCourse(any(), any()) }.returns(
+            CourseDTO(id= 1, name = "Amitesh", category = "Android Development")
+        )
+        val courseDTO = CourseDTO(id= null, name = "Amitesh Singh", category = "Android Development")
+        val updatedCourse = webTestClient
+            .put()
+            .uri("/v1/courses/{courseId}", course.id)
+            .bodyValue(courseDTO)
+            .exchange()
+            .expectStatus()
+            .isOk
+            .expectBody(CourseDTO::class.java)
+            .returnResult()
+            .responseBody
+        assertEquals("Amitesh Singh",updatedCourse?.name)
     }
 
 }
