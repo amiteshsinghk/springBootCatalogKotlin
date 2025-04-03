@@ -1,5 +1,6 @@
 package com.amitesh.catlogservice.controller.util
 
+import com.amitesh.catlogservice.dto.CourseDTO
 import com.amitesh.catlogservice.entity.Course
 
 fun getDemoCourseList(): List<Course> = (1..100).map { index->
@@ -10,14 +11,14 @@ fun getDemoCourseList(): List<Course> = (1..100).map { index->
     )
 }
 
-//fun getDemoCourseList()= listOf(
-//    Course(null,
-//        "Build RestFul APis using SpringBoot and Kotlin", "Development"),
-//    Course(null,
-//        "Build Reactive Microservices using Spring WebFlux/SpringBoot", "Development"
-//        ,
-//    ),
-//    Course(null,
-//        "Wiremock for Java Developers", "Development" ,
-//    )
-//)
+fun courseDTO(
+    id: Int? = null,
+    name: String = "Amitesh",
+    category: String = "Development",
+//    instructorId: Int? = 1
+) = CourseDTO(
+    id,
+    name,
+    category,
+//    instructorId
+)
