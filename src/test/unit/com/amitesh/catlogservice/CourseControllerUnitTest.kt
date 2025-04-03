@@ -14,6 +14,9 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.test.web.reactive.server.WebTestClient
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
+import io.mockk.just
+import io.mockk.runs
+import io.mockk.verify
 
 @WebMvcTest(controllers = [CourseController::class])
 @AutoConfigureWebTestClient
@@ -92,4 +95,18 @@ class CourseControllerUnitTest {
         assertEquals("Amitesh Singh",updatedCourse?.name)
     }
 
+    @Test
+    fun deleteCourse(){
+        every {
+            courseServiceMockk.deleteCourse(any())
+        } just runs
+
+        webTestClient
+            .delete()
+            .uri("/v1/courses/{courseId}", 1)
+            .exchange()
+            .expectStatus()
+            .isNoContent
+        verify(exactly = 1) { courseServiceMockk.deleteCourse(any()) }
+    }
 }
