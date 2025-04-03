@@ -77,12 +77,12 @@ class CourseControllerUnitTest {
     fun updateCourse(){
         val course = Course(id= null, name = "Amitesh", category = "Android Development")
         every { courseServiceMockk.updateCourse(any(), any()) }.returns(
-            CourseDTO(id= 1, name = "Amitesh", category = "Android Development")
+            CourseDTO(id= 1, name = "Amitesh Singh", category = "Android Development")
         )
         val courseDTO = CourseDTO(id= null, name = "Amitesh Singh", category = "Android Development")
         val updatedCourse = webTestClient
             .put()
-            .uri("/v1/courses/{courseId}", course.id)
+            .uri("/v1/courses/{courseId}", 1)
             .bodyValue(courseDTO)
             .exchange()
             .expectStatus()
