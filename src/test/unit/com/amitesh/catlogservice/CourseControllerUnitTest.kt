@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.test.web.reactive.server.WebTestClient
+import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 @WebMvcTest(controllers = [CourseController::class])
@@ -47,6 +48,28 @@ class CourseControllerUnitTest {
         assertTrue {
             savedCourseDTO?.id != null
         }
+    }
+
+    @Test
+    fun retrieveAllCourses(){
+        every {
+            courseServiceMockk.retrieveAllCourses()
+        }.returnsMany(
+            listOf(courseDTO(id = 1),
+                courseDTO(id = 2)
+            )
+        )
+        val courseDTOList = webTestClient
+            .get()
+            .uri("/v1/courses")
+            .exchange()
+            .expectStatus()
+            .isOk
+            .expectBodyList(CourseDTO::class.java)
+            .returnResult()
+            .responseBody
+
+        assertEquals(2,courseDTOList?.size)
     }
 
 }
