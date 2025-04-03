@@ -77,11 +77,35 @@ class CourseControllerUnitTest {
     }
 
     @Test
-    fun retrieveAllCourses(){
+    fun addCourseRuntimeException() {
+        val courseDto = CourseDTO(
+            id = null,
+            name = "Amitesh",
+            category = "Development"
+        )
+
+        every { courseServiceMockk.addCourse(any()) } throws RuntimeException("Unexpected Error occurred.")
+
+        val response = webTestClient
+            .post()
+            .uri("/v1/courses")
+            .bodyValue(courseDto)
+            .exchange()
+            .expectStatus()
+            .is5xxServerError
+            .expectBody(String::class.java)
+            .returnResult()
+            .responseBody
+        assertEquals("Unexpected Error occurred.", response)
+    }
+
+    @Test
+    fun retrieveAllCourses() {
         every {
             courseServiceMockk.retrieveAllCourses()
         }.returnsMany(
-            listOf(courseDTO(id = 1),
+            listOf(
+                courseDTO(id = 1),
                 courseDTO(id = 2)
             )
         )
@@ -95,15 +119,15 @@ class CourseControllerUnitTest {
             .returnResult()
             .responseBody
 
-        assertEquals(2,courseDTOList?.size)
+        assertEquals(2, courseDTOList?.size)
     }
 
     @Test
-    fun updateCourse(){
+    fun updateCourse() {
         every { courseServiceMockk.updateCourse(any(), any()) }.returns(
-            CourseDTO(id= 1, name = "Amitesh Singh", category = "Android Development")
+            CourseDTO(id = 1, name = "Amitesh Singh", category = "Android Development")
         )
-        val courseDTO = CourseDTO(id= null, name = "Amitesh Singh", category = "Android Development")
+        val courseDTO = CourseDTO(id = null, name = "Amitesh Singh", category = "Android Development")
         val updatedCourse = webTestClient
             .put()
             .uri("/v1/courses/{courseId}", 1)
@@ -114,11 +138,11 @@ class CourseControllerUnitTest {
             .expectBody(CourseDTO::class.java)
             .returnResult()
             .responseBody
-        assertEquals("Amitesh Singh",updatedCourse?.name)
+        assertEquals("Amitesh Singh", updatedCourse?.name)
     }
 
     @Test
-    fun deleteCourse(){
+    fun deleteCourse() {
         every {
             courseServiceMockk.deleteCourse(any())
         } just runs
