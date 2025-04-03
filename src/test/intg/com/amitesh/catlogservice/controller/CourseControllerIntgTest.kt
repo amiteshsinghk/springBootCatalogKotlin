@@ -91,4 +91,20 @@ CourseControllerIntgTest {
             .responseBody
         assertEquals("Amitesh Singh",updatedCourse?.name)
     }
+
+    @Test
+    fun deleteCourse(){
+        val course = Course(
+            id = null,
+            name = "Amitesh",
+            category = "Android Development"
+        )
+        courseRepository.save(course)
+        webTestClient
+            .delete()
+            .uri("v1/courses/{courseId}", course.id)
+            .exchange()
+            .expectStatus()
+            .isNoContent
+    }
 }
