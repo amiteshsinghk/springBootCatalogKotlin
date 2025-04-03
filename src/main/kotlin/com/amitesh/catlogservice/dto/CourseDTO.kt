@@ -4,8 +4,8 @@ import jakarta.validation.constraints.NotBlank
 
 data class CourseDTO(
     val id: Int?,
-    @get:NotBlank(message = "name must not blank")
+    @get:NotBlank(message = "CourseDTO :: name must not blank")
     val name: String,
-    @get:NotBlank(message = "category must not blank")
+    @get:NotBlank(message = "CourseDTO :: category must not blank")
     val category: String
 )

@@ -3,7 +3,6 @@ package com.amitesh.catlogservice
 import com.amitesh.catlogservice.controller.CourseController
 import com.amitesh.catlogservice.controller.util.courseDTO
 import com.amitesh.catlogservice.dto.CourseDTO
-import com.amitesh.catlogservice.entity.Course
 import com.amitesh.catlogservice.service.CourseService
 import com.ninjasquad.springmockk.MockkBean
 import io.mockk.every
@@ -64,14 +63,17 @@ class CourseControllerUnitTest {
 
         every { courseServiceMockk.addCourse(any()) } returns courseDTO(id = 1)
 
-        val savedCourseDTO = webTestClient
+        val response = webTestClient
             .post()
             .uri("/v1/courses")
             .bodyValue(courseDto)
             .exchange()
             .expectStatus()
             .isBadRequest
-
+            .expectBody(String::class.java)
+            .returnResult()
+            .responseBody
+        assertEquals("CourseDTO :: category must not blank, CourseDTO :: name must not blank", response)
     }
 
     @Test
