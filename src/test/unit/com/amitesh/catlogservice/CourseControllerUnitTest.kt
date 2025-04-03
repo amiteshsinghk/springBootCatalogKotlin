@@ -75,7 +75,6 @@ class CourseControllerUnitTest {
 
     @Test
     fun updateCourse(){
-        val course = Course(id= null, name = "Amitesh", category = "Android Development")
         every { courseServiceMockk.updateCourse(any(), any()) }.returns(
             CourseDTO(id= 1, name = "Amitesh Singh", category = "Android Development")
         )
