@@ -2,6 +2,7 @@ package com.amitesh.catlogservice.service
 
 import com.amitesh.catlogservice.dto.CourseDTO
 import com.amitesh.catlogservice.exception.CourseNotFoundException
+import com.amitesh.catlogservice.exception.InstructorNotValidException
 import com.amitesh.catlogservice.repository.CourseRepository
 import com.amitesh.catlogservice.service.mapper.toCourse
 import com.amitesh.catlogservice.service.mapper.toCourseDTO
@@ -9,7 +10,8 @@ import mu.KLogging
 import org.springframework.stereotype.Service
 
 @Service
-class CourseService(private val courseRepository: CourseRepository) {
+class CourseService(private val courseRepository: CourseRepository,
+    private val instructorService: InstructorService) {
 
 
     companion object {
@@ -17,7 +19,11 @@ class CourseService(private val courseRepository: CourseRepository) {
     }
 
     fun addCourse(courseDTO: CourseDTO): CourseDTO {
-        val course = courseRepository.save(courseDTO.toCourse())
+        val optionalInstructor = courseDTO.instructorId?.let { instructorService.findByInstructor(it) }
+        if (optionalInstructor == null || optionalInstructor.isEmpty){
+            throw InstructorNotValidException("Instructor Not Valid for the Id: ${courseDTO.instructorId}")
+        }
+        val course = courseRepository.save(courseDTO.toCourse(optionalInstructor.get()))
         return course.toCourseDTO()
     }
 

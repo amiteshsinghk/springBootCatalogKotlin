@@ -1,5 +1,6 @@
 package com.amitesh.catlogservice.exceptionHandler
 
+import com.amitesh.catlogservice.exception.InstructorNotValidException
 import mu.KLogging
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
@@ -41,5 +42,12 @@ class GlobalErrorHandler : ResponseEntityExceptionHandler() {
             .body(
                 ex.message
             )
+    }
+
+    @ExceptionHandler(InstructorNotValidException::class)
+    fun handleInstructorNotValidExceptions(ex: InstructorNotValidException, request: WebRequest): ResponseEntity<Any> {
+        logger.info("ExceptionOccurred :: ${ex.message} on request: $request", ex)
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+            .body(ex.message)
     }
 }

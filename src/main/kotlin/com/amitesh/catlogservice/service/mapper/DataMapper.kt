@@ -5,11 +5,12 @@ import com.amitesh.catlogservice.dto.InstructorDTO
 import com.amitesh.catlogservice.entity.Course
 import com.amitesh.catlogservice.entity.Instructor
 
-fun CourseDTO.toCourse(): Course {
+fun CourseDTO.toCourse(instructor: Instructor): Course {
     return Course(
         id = this.id,
         name = this.name,
-        category = this.category
+        category = this.category,
+        instructor = instructor
     )
 }
 
@@ -17,7 +18,8 @@ fun Course.toCourseDTO(): CourseDTO {
     return CourseDTO(
         id = this.id,
         name = this.name,
-        category = this.category
+        category = this.category,
+        instructorId = this.instructor.id
     )
 }
 
@@ -27,9 +29,9 @@ fun List<Course>.toCourseDTO(): List<CourseDTO>{
     }
 }
 
-fun List<CourseDTO>.toCourse(): List<Course>{
+fun List<CourseDTO>.toCourse(instructor: Instructor): List<Course>{
     return this.map {
-        it.toCourse()
+        it.toCourse(instructor)
     }
 }
 
