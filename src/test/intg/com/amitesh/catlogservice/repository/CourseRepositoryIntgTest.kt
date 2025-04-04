@@ -1,7 +1,9 @@
 package com.amitesh.catlogservice.repository
 
 import com.amitesh.catlogservice.entity.Course
+import com.amitesh.catlogservice.service.mapper.toInstructor
 import com.amitesh.catlogservice.util.getDemoCourseList
+import com.amitesh.catlogservice.util.instructorDTO
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -22,12 +24,16 @@ class CourseRepositoryIntgTest {
     @Autowired
     lateinit var courseRepository: CourseRepository
 
+    @Autowired
+    lateinit var instructorRepository: InstructorRepository
+
     lateinit var coursesList: List<Course>
 
     @BeforeEach
     fun setup() {
         courseRepository.deleteAll()
-        coursesList = getDemoCourseList()
+        val instructor = instructorRepository.save(instructorDTO().toInstructor())
+        coursesList = getDemoCourseList(instructor)
         courseRepository.saveAll(coursesList)
     }
 
@@ -47,16 +53,16 @@ class CourseRepositoryIntgTest {
 
     @ParameterizedTest
     @MethodSource("courseAndSize")
-    fun findCoursesByName_approach2(name: String, expectedSize: Int){
+    fun findCoursesByName_approach2(name: String, expectedSize: Int) {
         val courses = courseRepository.findCoursesByName(name)
         println("courses :: $courses")
         Assertions.assertEquals(expectedSize, courses.size)
     }
 
-    companion object{
+    companion object {
         @JvmStatic
-        fun courseAndSize(): Stream<Arguments>{
-            return Stream.of(Arguments.arguments("Course2222",1))
+        fun courseAndSize(): Stream<Arguments> {
+            return Stream.of(Arguments.arguments("Course2222", 1))
         }
     }
 

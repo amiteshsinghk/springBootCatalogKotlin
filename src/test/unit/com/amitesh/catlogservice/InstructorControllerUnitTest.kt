@@ -1,10 +1,8 @@
 package com.amitesh.catlogservice
 
 import com.amitesh.catlogservice.controller.InstructorController
-import com.amitesh.catlogservice.dto.CourseDTO
 import com.amitesh.catlogservice.dto.InstructorDTO
 import com.amitesh.catlogservice.service.InstructorService
-import com.amitesh.catlogservice.util.courseDTO
 import com.amitesh.catlogservice.util.instructorDTO
 import com.ninjasquad.springmockk.MockkBean
 import io.mockk.every
@@ -51,7 +49,7 @@ class InstructorControllerUnitTest {
         }
     }
 
-//  Bean Validation
+    //  Bean Validation
     @Test
     fun createInstructorValidation() {
         val instructorDto = InstructorDTO(

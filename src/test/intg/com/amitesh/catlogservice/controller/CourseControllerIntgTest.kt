@@ -2,8 +2,12 @@ package com.amitesh.catlogservice.controller
 
 import com.amitesh.catlogservice.dto.CourseDTO
 import com.amitesh.catlogservice.entity.Course
+import com.amitesh.catlogservice.entity.Instructor
 import com.amitesh.catlogservice.repository.CourseRepository
+import com.amitesh.catlogservice.repository.InstructorRepository
+import com.amitesh.catlogservice.service.mapper.toInstructor
 import com.amitesh.catlogservice.util.getDemoCourseList
+import com.amitesh.catlogservice.util.instructorDTO
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -27,12 +31,18 @@ CourseControllerIntgTest {
     @Autowired
     lateinit var courseRepository: CourseRepository
 
+    @Autowired
+    lateinit var instructorRepository: InstructorRepository
+
     lateinit var coursesList: List<Course>
+    lateinit var instructor: Instructor
 
     @BeforeEach
     fun setup() {
         courseRepository.deleteAll()
-        coursesList = getDemoCourseList()
+        instructorRepository.deleteAll()
+        instructor = instructorRepository.save(instructorDTO().toInstructor())
+        coursesList = getDemoCourseList(instructor)
         courseRepository.saveAll(coursesList)
     }
 
@@ -41,7 +51,8 @@ CourseControllerIntgTest {
         val courseDto = CourseDTO(
             id = null,
             name = "Build Restful APIs using SpringBoot and Kotlin",
-            category = "Amitesh Singh"
+            category = "Amitesh Singh",
+            instructorId = instructor.id
         )
 
         val savedCourseDTO = webTestClient
@@ -79,7 +90,7 @@ CourseControllerIntgTest {
     fun retrieveCoursesByName() {
         val endPoint = UriComponentsBuilder
             .fromUriString("/v1/courses")
-            .queryParam("course_name","Course2222")
+            .queryParam("course_name", "Course2222")
             .toUriString()
         val courseDTOList = webTestClient
             .get()
@@ -96,7 +107,9 @@ CourseControllerIntgTest {
 
     @Test
     fun updateCourse() {
-        val course = Course(id = null, name = "Amitesh", category = "Android Development")
+        val ins = instructorDTO()
+        val instructor = instructorRepository.save(ins.toInstructor())
+        val course = Course(id = null, name = "Amitesh", category = "Android Development", instructor = instructor)
         courseRepository.save(course)
         val courseDTO = CourseDTO(id = null, name = "Amitesh Singh", category = "Android Development")
         val updatedCourse = webTestClient
@@ -114,10 +127,13 @@ CourseControllerIntgTest {
 
     @Test
     fun deleteCourse() {
+        val ins = instructorDTO()
+        val instructor = instructorRepository.save(ins.toInstructor())
         val course = Course(
             id = null,
             name = "Amitesh",
-            category = "Android Development"
+            category = "Android Development",
+            instructor = instructor
         )
         courseRepository.save(course)
         webTestClient

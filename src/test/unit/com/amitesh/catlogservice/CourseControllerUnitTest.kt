@@ -32,7 +32,8 @@ class CourseControllerUnitTest {
         val courseDto = CourseDTO(
             id = null,
             name = "Amitesh",
-            category = "Development"
+            category = "Development",
+            instructorId = 1
         )
 
         every { courseServiceMockk.addCourse(any()) } returns courseDTO(id = 1)
@@ -58,7 +59,8 @@ class CourseControllerUnitTest {
         val courseDto = CourseDTO(
             id = null,
             name = "",
-            category = ""
+            category = "",
+            instructorId = null
         )
 
         every { courseServiceMockk.addCourse(any()) } returns courseDTO(id = 1)
@@ -73,7 +75,11 @@ class CourseControllerUnitTest {
             .expectBody(String::class.java)
             .returnResult()
             .responseBody
-        assertEquals("CourseDTO :: category must not blank, CourseDTO :: name must not blank", response)
+        println("addCourseValidation :: $response")
+        assertEquals(
+            "CourseDTO :: category must not blank, CourseDTO :: instructorId must not blank, CourseDTO :: name must not blank",
+            response
+        )
     }
 
     @Test
@@ -81,7 +87,8 @@ class CourseControllerUnitTest {
         val courseDto = CourseDTO(
             id = null,
             name = "Amitesh",
-            category = "Development"
+            category = "Development",
+            instructorId = 1
         )
 
         every { courseServiceMockk.addCourse(any()) } throws RuntimeException("Unexpected Error occurred.")
