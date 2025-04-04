@@ -1,6 +1,7 @@
 package com.amitesh.catlogservice.util
 
 import com.amitesh.catlogservice.dto.CourseDTO
+import com.amitesh.catlogservice.dto.InstructorDTO
 import com.amitesh.catlogservice.entity.Course
 
 fun getDemoCourseList(): List<Course> = (1..100).map { index->
@@ -22,3 +23,12 @@ fun courseDTO(
     category,
 //    instructorId
 )
+
+fun instructorDTO(
+    id: Int? = null,
+    name: String = "Amitesh Singh"
+) = InstructorDTO(
+    id,
+    name
+)
+
