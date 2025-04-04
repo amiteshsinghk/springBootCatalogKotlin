@@ -1,9 +1,9 @@
 package com.amitesh.catlogservice.controller
 
-import com.amitesh.catlogservice.util.getDemoCourseList
 import com.amitesh.catlogservice.dto.CourseDTO
 import com.amitesh.catlogservice.entity.Course
 import com.amitesh.catlogservice.repository.CourseRepository
+import com.amitesh.catlogservice.util.getDemoCourseList
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -11,8 +11,8 @@ import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWeb
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.web.reactive.server.WebTestClient
+import org.springframework.web.util.UriComponentsBuilder
 import kotlin.test.assertEquals
-
 import kotlin.test.assertTrue
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -73,6 +73,25 @@ CourseControllerIntgTest {
             .responseBody
 
         assertEquals(coursesList.size, courseDTOList?.size)
+    }
+
+    @Test
+    fun retrieveCoursesByName() {
+        val endPoint = UriComponentsBuilder
+            .fromUriString("/v1/courses")
+            .queryParam("course_name","Course2222")
+            .toUriString()
+        val courseDTOList = webTestClient
+            .get()
+            .uri(endPoint)
+            .exchange()
+            .expectStatus()
+            .isOk
+            .expectBodyList(CourseDTO::class.java)
+            .returnResult()
+            .responseBody
+
+        assertEquals(1, courseDTOList?.size)
     }
 
     @Test
