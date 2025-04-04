@@ -6,11 +6,13 @@ import com.amitesh.catlogservice.entity.Instructor
 import com.amitesh.catlogservice.repository.CourseRepository
 import com.amitesh.catlogservice.repository.InstructorRepository
 import com.amitesh.catlogservice.service.mapper.toInstructor
+import com.amitesh.catlogservice.util.PostgreSQLContainerInitializer
 import com.amitesh.catlogservice.util.getDemoCourseList
 import com.amitesh.catlogservice.util.instructorDTO
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.ActiveProfiles
@@ -22,8 +24,8 @@ import kotlin.test.assertTrue
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
 @AutoConfigureWebTestClient
-class
-CourseControllerIntgTest {
+@AutoConfigureTestDatabase(replace= AutoConfigureTestDatabase.Replace.NONE)
+class CourseControllerIntgTest: PostgreSQLContainerInitializer() {
 
     @Autowired
     lateinit var webTestClient: WebTestClient

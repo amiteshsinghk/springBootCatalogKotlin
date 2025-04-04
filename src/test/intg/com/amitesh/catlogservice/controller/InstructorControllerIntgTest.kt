@@ -1,10 +1,10 @@
 package com.amitesh.catlogservice.controller
 
-import com.amitesh.catlogservice.dto.CourseDTO
 import com.amitesh.catlogservice.dto.InstructorDTO
-import com.amitesh.catlogservice.repository.InstructorRepository
+import com.amitesh.catlogservice.util.PostgreSQLContainerInitializer
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.ActiveProfiles
@@ -14,7 +14,8 @@ import kotlin.test.assertTrue
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
 @AutoConfigureWebTestClient
-class InstructorControllerIntgTest {
+@AutoConfigureTestDatabase(replace= AutoConfigureTestDatabase.Replace.NONE)
+class InstructorControllerIntgTest: PostgreSQLContainerInitializer() {
     @Autowired
     lateinit var webTestClient: WebTestClient
 
